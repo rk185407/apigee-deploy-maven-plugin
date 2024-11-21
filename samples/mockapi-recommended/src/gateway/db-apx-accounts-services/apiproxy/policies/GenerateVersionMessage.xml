@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="GenerateVersionMessage">
+    <DisplayName>GenerateVersionXML</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Set>
+        <Payload contentType="text/xml">
+            <VersionInfo>
+                <ProxyName>db-apx-accounts-services</ProxyName>
+                <BuildDate>2023-04-17T13:59:41Z</BuildDate>
+                <GitCommitId>fddbd729d99d7169d650c7762e62b064d7bf691c</GitCommitId>
+            </VersionInfo>
+        </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <AssignTo type="response" transport="http" createNew="true"/>
+</AssignMessage>

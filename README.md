@@ -189,7 +189,7 @@ Child-pom: Here we configure all the details specific to the particular proxy.
 
 #### pom-xml Sample
 
-Refer child-pom template [child-pom](./samples/mockapi-recommended/src/gateway/Mock-v1/pom.xml).
+Refer child-pom template [child-pom](samples/mockapi-recommended/src/gateway/db-apx-accounts-services/pom.xml).
 
  * **groupId** element's content should match that of the same element in the parent pom.xml.
  * **artifactId** element's content should be a unique name, typically set to the name of the API.
@@ -206,7 +206,7 @@ For instance in the example below you have two configurations one for the test p
 
 #### Config-json Sample
 
-Refer config.json template [config.json](./samples/mockapi-recommended/src/gateway/Mock-v1/config.json)
+Refer config.json template [config.json](samples/mockapi-recommended/src/gateway/db-apx-accounts-services/config.json)
 
 ## Commands for deploying the proxy using maven
 

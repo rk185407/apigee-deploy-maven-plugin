@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="InvalidPathError">
+<DisplayName>InvalidPathError</DisplayName>
+<AssignVariable>
+    <Name>flow.error.code</Name>
+    <Value>CMN_90001</Value>
+</AssignVariable>
+<AssignVariable>
+    <Name>flow.error.message</Name>
+    <Value>Client not authorized to access this resource</Value>
+</AssignVariable>
+<AssignVariable>
+    <Name>flow.error.status</Name>
+    <Value>401</Value>
+</AssignVariable>
+<AssignVariable>
+    <Name>flow.error.reason</Name>
+    <Value>Unauthorized</Value>
+</AssignVariable>
+</AssignMessage>

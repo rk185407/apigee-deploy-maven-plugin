@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Javascript async="false" continueOnError="false" enabled="true" timeLimit="200" name="WhitelistResponseHeaders">
+    <DisplayName>WhitelistResponseHeaders</DisplayName>
+    <Properties/>
+    <IncludeURL>jsc://apx-errors.js</IncludeURL>
+    <IncludeURL>jsc://apx-constants.js</IncludeURL>
+    <IncludeURL>jsc://apx-commons.js</IncludeURL>
+    <IncludeURL>jsc://responseHeaderBuilder.js</IncludeURL>
+    <ResourceURL>jsc://whitelistResponseHeaders.js</ResourceURL>
+</Javascript>

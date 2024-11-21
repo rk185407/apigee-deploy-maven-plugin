@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault async="false" continueOnError="false" enabled="true" name="RaiseFaultDefaultErrorResponseXml">
+    <DisplayName>RaiseFaultDefaultErrorResponseXml</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <FaultResponse>
+        <Set>
+            <Headers>
+                <Header name="transactionId">{request.header.transactionId}</Header>
+            </Headers>
+            <Payload contentType="application/xml">
+                <ErrorInfo xmlns="http://ncr.com/banking/services/common/model">
+                    <code>{flow.error.code}</code>
+                    <message>{flow.error.message}</message>
+                </ErrorInfo>
+            </Payload>
+            <StatusCode>{flow.error.status}</StatusCode>
+            <ReasonPhrase>{flow.error.reason}</ReasonPhrase>
+        </Set>
+    </FaultResponse>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <ShortFaultReason>false</ShortFaultReason>
+</RaiseFault>

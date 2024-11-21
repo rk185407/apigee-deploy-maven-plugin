@@ -1,0 +1,1 @@
+context.setVariable('ncr.api.endpoint-opid', context.getVariable('current.flow.name'));

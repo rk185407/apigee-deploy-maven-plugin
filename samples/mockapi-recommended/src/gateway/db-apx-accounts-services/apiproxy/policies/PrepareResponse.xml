@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout async="false" continueOnError="false" enabled="true" name="PrepareResponse">
+    <DisplayName>PrepareResponse</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Parameters>
+        <!-- If this allowedResponseHeaders is not sent then shared flow will whitelist these headers [transactionId,Content-Type,Transfer-Encoding,Content-Encoding] by default-->
+        <Parameter name="allowedResponseHeaders">transactionId,Content-Type,Transfer-Encoding,Content-Encoding</Parameter>
+    </Parameters>
+    <SharedFlowBundle>db-apx-prepare-service-response</SharedFlowBundle>
+</FlowCallout>

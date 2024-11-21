@@ -1,0 +1,899 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Accounts Service",
+        "description": "The Account Service provides API to retrieve accounts. <h3> Error codes returned by the service</h3> <table> <thead> <tr> <th>Error Code</th> <th>Error Message</th> <th>Http Status Code</th> </tr> </thead> <tbody> <tr><td>ACC_00002</td><td>Given password is invalid</td><td>401</td></tr> <tr><td>ACC_00005</td><td>Error processing filter expression</td><td>400</td></tr> <tr><td>ACC_00011</td><td>Validation Error</td><td>400</td></tr> <tr><td>ACC_00012</td><td>Data not found</td><td>404</td></tr> <tr><td>ACC_00013</td><td>Validation Error occurred</td><td>500</td></tr> <tr><td>ACC_00014</td><td>The CIF number is required, but was not found</td><td>500</td></tr> <tr><td>ACC_00101</td><td>User not found</td><td>404</td></tr> <tr><td>ACC_00113</td><td>Update nickname feature is not enabled</td><td>403</td></tr> <tr><td>ACC_00114</td><td>Nickname field should not be empty</td><td>400</td></tr> <tr><td>ACC_00115</td><td>Nick name update is disabled for Joint Accounts</td><td>403</td></tr> <tr><td>ACC_00116</td><td>NickName length in request is greater than configured maximum length or Database column length</td><td>400</td></tr> <tr><td>ACC_00117</td><td>Host update is done but exception occurred while updating the database</td><td>500</td></tr> <tr><td>ACC_00118</td><td>Host update is done but exception occurred while inserting record to database</td><td>500</td></tr> <tr><td>ACC_00119</td><td>Hide/show account feature is not enabled</td><td>500</td></tr> <tr><td>ACC_00408</td><td>BB User is missing User Id in the request</td><td>400</td></tr> <tr><td>ACC_00409</td><td>Invalid User Type Header for Business Banking User</td><td>400</td></tr> <tr><td>ACC_00410</td><td>A location is required for BB users</td><td>400</td></tr> <tr><td>ACC_00600</td><td>ServiceType parameter is invalid. Valid values are IB/BB</td><td>400</td></tr> <tr><td>ACC_00601</td><td>Invalid JWT token</td><td>400</td></tr> <tr><td>ACC_00602</td><td>Unauthorized access</td><td>401</td></tr> <tr><td>ACC_00702</td><td>Subuser Id is empty</td><td>400</td></tr> <tr><td>ACC_99990</td><td>Client error</td><td>400</td></tr> <tr><td>ACC_99991</td><td>Request callingAppId header is too long</td><td>400</td></tr> <tr><td>ACC_99992</td><td>One or more request query params are invalid or not provided.</td><td>400</td></tr> <tr><td>ACC_99993</td><td>Server cannot handle this request</td><td>varies</td></tr> <tr><td>ACC_99994</td><td>Invalid query param</td><td>400</td></tr> <tr><td>ACC_99995</td><td>Request should only contain printable ASCII characters</td><td>400</td></tr> <tr><td>ACC_99996</td><td>Request header is too long</td><td>400</td></tr> <tr><td>ACC_99997</td><td>Request transactionId header is too long</td><td>400</td></tr> <tr><td>ACC_99998</td><td>Request is missing a transactionId header</td><td>400</td></tr> </tbody> </table>",
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/v1/accounts": {
+            "get": {
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Gets accounts for the given institution customer.",
+                "operationId": "getAccounts-v1",
+                "parameters": [
+                    {
+                        "name": "transactionId",
+                        "in": "header",
+                        "description": "A unique identifier for this request.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "A JWT that authorizes this request.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "viewName",
+                        "in": "query",
+                        "description": "Filters the returned fields based on the provided view name.\nCan be:\n- `s` - Small view\n- `m` - Medium view\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "crossAccount",
+                        "in": "query",
+                        "description": "Excludes cross user accounts from the response when false.",
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "description": "An ODATA filter expression to apply to the returned accounts.\nAllowed fields:\n- id\n- nickName\n- accountNumber\n- category\n  - DEPOSIT\n  - LOAN\n  - INVESTMENT\n  - TIERED_LOAN\n  - CROSS_USER_ACCOUNT\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "additionalFields",
+                        "in": "query",
+                        "description": "Provides additional fields for each account when true.",
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "$apply",
+                        "in": "query",
+                        "description": "When passed along with $skipGroups and $topGroups (all three must be provided), accounts will be returned for all institution customers that the user has access to, grouped by the specified field. Currently only grouping by customer is supported.\n Must be:\n - `groupBy(customer)`\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$skipGroups",
+                        "in": "query",
+                        "description": "Skips the specified number of groups in the response. Must be between 0 and [total number of institution customers in the JWT] - 1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "$topGroups",
+                        "in": "query",
+                        "description": "Returns the top n groups in the response. Currrently only a value of \"1\" is supported.\nMust be:\n- `1`\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "The content type of the request. Only application/json and application/xml are supported.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "The content type of the response. Only application/json and application/xml are supported. Defaults to application/json.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Accounts"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Accounts"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No entitled accounts found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/accounts/{accountId}": {
+            "get": {
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Gets the specified account for the given user.",
+                "operationId": "getAccount-v1",
+                "parameters": [
+                    {
+                        "name": "transactionId",
+                        "in": "header",
+                        "description": "A unique identifier for this request.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "A JWT that authorizes this request.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "viewName",
+                        "in": "query",
+                        "description": "Filters the returned fields based on the proided view name.\nCan be:\n- `s` - Small view\n- `m` - Medium view\n",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "crossAccount",
+                        "in": "query",
+                        "description": "Excludes cross user accounts from the response when false.",
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    },
+                    {
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "The ID of the account to retrieve.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "The content type of the request. Only application/json and application/xml are supported.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "The content type of the response. Only application/json and application/xml are supported. Defaults to application/json.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorInfo"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Accounts": {
+                "type": "object",
+                "properties": {
+                    "accounts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Account"
+                        }
+                    },
+                    "totalGroupCount": {
+                        "type": "string",
+                        "description": "Total number of institutionCustomers/locations in JWT"
+                    }
+                }
+            },
+            "Account": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique Account Identifier (encrypted key identifier)"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of account"
+                    },
+                    "institutionUserId": {
+                        "type": "string",
+                        "description": "Unique user identifier"
+                    },
+                    "institutionId": {
+                        "type": "string",
+                        "description": "Financial Institution id this account is associated with"
+                    },
+                    "accountNumber": {
+                        "type": "string",
+                        "description": "Last 4 digits of the account number."
+                    },
+                    "nickName": {
+                        "type": "string",
+                        "description": "Account nickname"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/AccountType",
+                        "description": "Account type information"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/AccountCategory",
+                        "description": "Account category"
+                    },
+                    "primaryHolderName": {
+                        "type": "string",
+                        "description": "Primary account holder name (OR) Cross member/customer name from host"
+                    },
+                    "currentBalance": {
+                        "$ref": "#/components/schemas/Money"
+                    },
+                    "availableBalance": {
+                        "$ref": "#/components/schemas/Money"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/AccountStatus",
+                        "description": "Flags indicating the status of account."
+                    },
+                    "allowedActions": {
+                        "$ref": "#/components/schemas/Actions",
+                        "description": "Allowed actions on the account. Flags to identify account valid for transfers, display."
+                    },
+                    "routingNumber": {
+                        "type": "string",
+                        "description": "Routing number of the account."
+                    },
+                    "interestRate": {
+                        "type": "number",
+                        "description": "Interest rate.",
+                        "format": "float"
+                    },
+                    "interestYearToDate": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Interest/Dividends earned YTD"
+                    },
+                    "micrNumber": {
+                        "type": "string",
+                        "description": "MICR number for this account, returned only if known."
+                    },
+                    "maturityDate": {
+                        "type": "string",
+                        "description": "Maturity date",
+                        "format": "date"
+                    },
+                    "term": {
+                        "$ref": "#/components/schemas/TermType",
+                        "description": "Term of account, duration could be in months/days/years/weeks"
+                    },
+                    "escrowBalance": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Escrow balance"
+                    },
+                    "currentPrincipalBalance": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Current Principal Balance--Refers to the face amount of a debt instrument or an amount of money borrowed. As time goes by and as the end user makes payments on the loan, the principal balance goes down"
+                    },
+                    "nextPaymentAmount": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Payment amount"
+                    },
+                    "nextPaymentDate": {
+                        "type": "string",
+                        "description": "Next payment date",
+                        "format": "date"
+                    },
+                    "payOffAmount": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Loan payoff amount"
+                    },
+                    "minimumPayment": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Minimum payment (amount to avoid finance charge)"
+                    },
+                    "lineOfCreditLimit": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Line of credit limit"
+                    },
+                    "loanOriginationDate": {
+                        "type": "object",
+                        "description": "Loan origination date",
+                        "format": "date"
+                    },
+                    "pastPrincipalDueDate": {
+                        "type": "object",
+                        "description": "Past due date for principal",
+                        "format": "date"
+                    },
+                    "lastPrincipalPaymentAmount": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Last principal payment amount"
+                    },
+                    "originalLoanAmount": {
+                        "$ref": "#/components/schemas/Money",
+                        "description": "Original loan amount"
+                    }
+                }
+            },
+            "Account_Nickname": {
+                "type": "object",
+                "properties": {
+                    "nickName": {
+                        "type": "string",
+                        "description": "Account nickname"
+                    },
+                    "isVisible": {
+                        "type": "boolean",
+                        "description": "Flag to indicate if the account is visible to the end user. Based on user preference stored"
+                    }
+                }
+            },
+            "AccountType": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "$ref": "#/components/schemas/DIAccountType"
+                    },
+                    "fiAccountType": {
+                        "type": "integer",
+                        "description": "FI Account type from host - Based on FI level config this value could change",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Account description returned from the host - FI can send custom account type description"
+                    }
+                }
+            },
+            "AccountStatus": {
+                "type": "object",
+                "properties": {
+                    "open": {
+                        "type": "boolean"
+                    },
+                    "closed": {
+                        "type": "boolean"
+                    },
+                    "negativeBalance": {
+                        "type": "boolean"
+                    },
+                    "delinquent": {
+                        "type": "boolean"
+                    },
+                    "inCollection": {
+                        "type": "boolean"
+                    },
+                    "overLimit": {
+                        "type": "boolean"
+                    },
+                    "writtenOff": {
+                        "type": "boolean"
+                    },
+                    "creditBalance": {
+                        "type": "boolean"
+                    },
+                    "paymentCoupon": {
+                        "type": "boolean"
+                    },
+                    "retirementPlan": {
+                        "type": "boolean"
+                    },
+                    "retPlanOwnedByDeceased": {
+                        "type": "boolean"
+                    },
+                    "approved": {
+                        "type": "boolean"
+                    },
+                    "notApproved": {
+                        "type": "boolean"
+                    },
+                    "deleted": {
+                        "type": "boolean"
+                    },
+                    "verified": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Actions": {
+                "type": "object",
+                "properties": {
+                    "summary": {
+                        "type": "boolean"
+                    },
+                    "transferFrom": {
+                        "type": "boolean"
+                    },
+                    "transferTo": {
+                        "type": "boolean"
+                    },
+                    "isHistoryEnabled": {
+                        "type": "boolean"
+                    },
+                    "isHistoryEntitled": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "DIAccountType": {
+                "type": "string",
+                "enum": [
+                    "SAVINGS",
+                    "CHECKING",
+                    "MONEY_MARKET",
+                    "BROKERAGE",
+                    "LINE_OF_CREDIT_LOAN",
+                    "TCL_CREDIT_LINE",
+                    "UNKNOWN",
+                    "KEOGH",
+                    "RETIREMENT_401K",
+                    "CERT_OF_DEPOSIT",
+                    "CSI_CERT_OF_DEPOSIT",
+                    "CREDIT_CARD_LOAN",
+                    "INSTALLMENT_LOAN",
+                    "CONSUMER_LOAN",
+                    "COMMERCIAL_LOAN",
+                    "MORTGAGE_LOAN",
+                    "RESIDENTIAL_MORTGAGE_LOAN",
+                    "COMMERCIAL_REFI_LOAN",
+                    "HOME_EQUITY_LOAN",
+                    "GENERAL_LEDGER_ACCOUNT",
+                    "GENERAL_LEDGER_CODE",
+                    "TCL_MASTER",
+                    "TCL_NOTE",
+                    "RETIREMENT_IRA"
+                ]
+            },
+            "ErrorInfo": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Money": {
+                "type": "object",
+                "properties": {
+                    "currencyCode": {
+                        "$ref": "#/components/schemas/CurrencyCode"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": "Specifies the amount value"
+                    }
+                }
+            },
+            "CurrencyCode": {
+                "type": "string",
+                "description": "ISO 4217 Currency Code enumeration",
+                "enum": [
+                    "AED",
+                    "AFA",
+                    "ALL",
+                    "ANG",
+                    "AOA",
+                    "AOK",
+                    "ARP",
+                    "ARS",
+                    "AMD",
+                    "ATS",
+                    "AUD",
+                    "AWF",
+                    "AWG",
+                    "AZM",
+                    "BAM",
+                    "BBD",
+                    "BDT",
+                    "BEF",
+                    "BGL",
+                    "BHD",
+                    "BIF",
+                    "BMD",
+                    "BND",
+                    "BOB",
+                    "BRC",
+                    "BRL",
+                    "BSD",
+                    "BTN",
+                    "BUK",
+                    "BWP",
+                    "BYR",
+                    "BYB",
+                    "BZD",
+                    "CAD",
+                    "CDF",
+                    "CHF",
+                    "CLP",
+                    "CNY",
+                    "COP",
+                    "CRC",
+                    "CZK",
+                    "CUP",
+                    "CVE",
+                    "DDM",
+                    "DEM",
+                    "DJF",
+                    "DKK",
+                    "DOP",
+                    "DZD",
+                    "ECS",
+                    "EEK",
+                    "EGP",
+                    "ERN",
+                    "ESP",
+                    "ETB",
+                    "EUR",
+                    "FIM",
+                    "FJD",
+                    "FKP",
+                    "FRF",
+                    "GBP",
+                    "GEL",
+                    "GHC",
+                    "GIP",
+                    "GMD",
+                    "GNF",
+                    "GRD",
+                    "GTQ",
+                    "GWP",
+                    "GYD",
+                    "HKD",
+                    "HNL",
+                    "HRK",
+                    "HTG",
+                    "HUF",
+                    "IDR",
+                    "IEP",
+                    "ILS",
+                    "INR",
+                    "IQD",
+                    "IRR",
+                    "ISK",
+                    "ITL",
+                    "JMD",
+                    "JOD",
+                    "KES",
+                    "KGS",
+                    "KHR",
+                    "KMF",
+                    "KPW",
+                    "KRW",
+                    "KWD",
+                    "KYD",
+                    "KZT",
+                    "LAK",
+                    "LBP",
+                    "LKR",
+                    "LRD",
+                    "LSL",
+                    "LTL",
+                    "LUF",
+                    "LVL",
+                    "LYD",
+                    "MAD",
+                    "MDL",
+                    "MGF",
+                    "MKD",
+                    "MMK",
+                    "MNT",
+                    "MOP",
+                    "MRO",
+                    "MUR",
+                    "MVR",
+                    "MWK",
+                    "MXN",
+                    "MXP",
+                    "MYR",
+                    "MZM",
+                    "NAD",
+                    "NGN",
+                    "NIC",
+                    "NIO",
+                    "NLG",
+                    "NOK",
+                    "NPR",
+                    "NZD",
+                    "OMR",
+                    "PAB",
+                    "PEN",
+                    "PES",
+                    "PGK",
+                    "PHP",
+                    "PKR",
+                    "PLN",
+                    "PLZ",
+                    "PTE",
+                    "PYG",
+                    "QAR",
+                    "ROL",
+                    "RUR",
+                    "RWF",
+                    "SAR",
+                    "SBD",
+                    "SCR",
+                    "SDD",
+                    "SDP",
+                    "SEK",
+                    "SGD",
+                    "SHP",
+                    "SIT",
+                    "SKK",
+                    "SLL",
+                    "SM",
+                    "SOS",
+                    "SRG",
+                    "STD",
+                    "SUR",
+                    "SVC",
+                    "SYP",
+                    "SZL",
+                    "THB",
+                    "TMM",
+                    "TND",
+                    "TOP",
+                    "TRL",
+                    "TTD",
+                    "TWD",
+                    "TZS",
+                    "UAH",
+                    "UGS",
+                    "UGX",
+                    "USD",
+                    "UYP",
+                    "UYU",
+                    "UZS",
+                    "VND",
+                    "VUV",
+                    "VAL",
+                    "WST",
+                    "XAF",
+                    "XCD",
+                    "XOF",
+                    "XPF",
+                    "YER",
+                    "YUD",
+                    "ZAR",
+                    "ZMK",
+                    "ZRZ",
+                    "ZWD"
+                ]
+            },
+            "Map": {
+                "type": "object",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Term": {
+                "type": "object",
+                "properties": {
+                    "duration": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "termType": {
+                        "$ref": "#/components/schemas/TermType"
+                    }
+                }
+            },
+            "TermType": {
+                "type": "string",
+                "enum": [
+                    "DAYS",
+                       "WEEKS",
+                    "MONTHS",
+                    "YEARS"
+                ]
+            },
+            "AccountCategory": {
+                "type": "string",
+                "enum": [
+                    "DEPOSIT",
+                    "LOAN",
+                    "INVESTMENT",
+                    "TIERED_LOAN",
+                    "CROSS_USER_ACCOUNT"
+                ]
+            }
+        }
+    }
+}

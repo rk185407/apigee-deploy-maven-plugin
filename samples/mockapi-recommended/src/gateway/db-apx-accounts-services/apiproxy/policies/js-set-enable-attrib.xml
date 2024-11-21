@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Javascript async="false" continueOnError="false" enabled="true" timeLimit="200" name="js-set-enable-attrib">
+    <DisplayName>js-set-enable-attrib</DisplayName>
+    <Properties/>
+    <ResourceURL>jsc://js-set-enable-attrib.js</ResourceURL>
+</Javascript>

@@ -101,13 +101,14 @@
                 <apigee.profile>test</apigee.profile>
                 <apigee.hosturl>https://apigee.googleapis.com</apigee.hosturl>
                 <apigee.apiversion>v1</apigee.apiversion>
-                <apigee.org>${org}</apigee.org>
-                <apigee.env>${env}</apigee.env>
+                <apigee.org>dbk-apex-dev</apigee.org>
+                <apigee.env>default-dev</apigee.env>
+                <!--apigee.apitype>sharedflow</apigee.apitype--> <!-- This is only for Shared Flows. Not required for deploying proxy -->
                 <apigee.authtype>oauth</apigee.authtype> <!-- only option -->
-                <apigee.bearer>${bearer}</apigee.bearer> <!-- this takes precedence over service account file -->                
+                <apigee.bearer>ya29.c.c0ASRK0GbCCet8joJz2btJnWZPUmdnjkM0YhLo4dgDslO6GkufzIlIu1FbU5OrF4hh7aHiHiIc9Cw2rtKunF_GfKCpYtns34d6OOV8FoXYtRUGlxIpIVQHvjVh3WlPa8-UBPoEyYoNrsC-ZdBUwM1nwWPIWrr8YCsQkGuZqpRlDQjFoZAc5_lyMb3L5tFjraJ77fExbCfVRMLPq4a9IIYCq01CwMNjG5i9ZDYh5NbZFragrmqn4DC5yjw8s406n4m_QPVzWESmY3scuwaXpi8ZFLkGpzk-ao28a9WyORzNrP8TCtGH2-n2ioSIPbzTK8Uu0RFEugT-4m0hABap8QGoymPxAM54nkb8VijKgBvMkq2Cd_FgQmepXFGeB-aL4clSD9wN396DOI95JBIvz6XZlYQYJyWp5VJlRiuJFMW96d9O5w2cf-e8FFbuundtYzxFba58BixI9oJvk6dmXnUQc7-dxrW1I26FmBOYxx5jjf_uFBtItlq866yfZjUpbx4gogI6oivJz3ZShOi6fYhIZbv2gylkjJu9q5nxbmYuR-rQ8F3vFxzYSburOUlvfF01MqI0sYIIxyq5ZI56orwoxIrbZhzWdO4ndXa6UeQOFI5lo8oice6p5OaewWUoxmYW1h5lBdbhUeMIeBjacS4q6bhl9pQ_X2I4J44rRUU4ek-Qbfc9osnWeVY32Uc80VBn4pr1eacRmlRienQIjr84aytrJpbMi2vbOR0sdiQOq0ovysizdkglgBbRRRFovuaf97yuF8ZO0c9W58zU_azSSwwoZVwM_SS4yc3seJ6v-xf3RxjJmQ5gnfWksJu0Vm0SZUV4XoX3ItbzyBkfo3F3qQnjYSyzhiX4SrS4XYmwMuv6zig-Q61svOxlV8rhJQoUiBvYFYmqkkbX5n1Rfl_z2tF6-omuMiuz8jWVv-3W97cRS8gnuRyMQxUuSFOmBmch7ZUv5mwm7i70Oxy_ZcS9Vzoo8VV4BO7dQegpaquWI0-86cffRWpx493</apigee.bearer> <!-- this takes precedence over service account file -->
                 <apigee.serviceaccount.file>${file}</apigee.serviceaccount.file>
                 <apigee.options>override</apigee.options> <!-- override is default. Other options are async|inactive|clean -->
-                <apigee.googletoken.email>${googleTokenEmail}</apigee.googletoken.email> <!-- Available in Apigee X and Apigee hybrid 1.6 + -->
+                <apigee.googletoken.email>apex-shared-sa@dbk-apex-dev.iam.gserviceaccount.com</apigee.googletoken.email> <!-- Available in Apigee X and Apigee hybrid 1.6 + -->
             </properties>
         </profile>
         <profile>

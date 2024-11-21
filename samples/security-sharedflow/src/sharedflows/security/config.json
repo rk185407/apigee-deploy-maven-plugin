@@ -3,7 +3,7 @@
         {
             "name": "test",
             "policies": [
-                {
+                /*{
                     "name": "AM-Set-Headers.xml",
                     "tokens": [
                         {
@@ -11,13 +11,13 @@
                             "value": "TEST"
                         }
                     ]
-                }
+                }*/
             ]
         },
         {
             "name": "prod",
             "policies": [
-                {
+                /*{
                     "name": "AM-Set-Headers.xml",
                     "tokens": [
                         {
@@ -25,7 +25,7 @@
                             "value": "PROD"
                         }
                     ]
-                }
+                }*/
             ]
         }
     ]

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="version">
+    <Description></Description>
+    <FaultRules></FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>js-set-enable-attrib</Name>
+            </Step>
+            <Step>
+                <Name>bsp-apims-main-preflow</Name>
+            </Step>
+        </Request>
+        <Response></Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request></Request>
+        <Response>
+            <Step>
+                <Name>bsp-apims-main-postflow</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <Flows>
+        <Flow name="getVersionInfo">
+            <Description>Return git and build info</Description>
+            <Request>
+                <Step>
+                    <Name>GenerateVersionMessage</Name>
+                </Step>
+                <Step>
+                    <Name>extract-endpoint</Name>
+                </Step>
+                <Step>
+                    <Condition>(private.ncr.api.global-quota-enabled == &quot;enabled&quot;)</Condition>
+                    <Name>bsp-apims-quota-flow</Name>
+                </Step>
+            </Request>
+            <Response></Response>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/version&quot;) and (request.verb = &quot;GET&quot;)</Condition>
+        </Flow>
+    </Flows>
+    <HTTPProxyConnection>
+        <BasePath>/digitalbanking/db-accounts/info</BasePath>
+        <VirtualHost>secure</VirtualHost>
+        <VirtualHost>default</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"></RouteRule>
+    <PostClientFlow name="PostClientFlow">
+        <Request></Request>
+        <Response>
+            <Step>
+                <Name>bsp-apims-main-postclient-flow</Name>
+            </Step>
+        </Response>
+    </PostClientFlow>
+    <DefaultFaultRule name="DefaultFaultRule">
+        <Step>
+            <Name>bsp-apims-main-postflow</Name>
+        </Step>
+    </DefaultFaultRule>
+</ProxyEndpoint>

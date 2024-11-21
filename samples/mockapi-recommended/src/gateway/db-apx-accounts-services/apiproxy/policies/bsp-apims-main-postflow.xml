@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout async="false" continueOnError="false" enabled="true" name="bsp-apims-main-postflow">
+    <DisplayName>BSP Postflow</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <SharedFlowBundle>bsp-apims-main-postflow</SharedFlowBundle>
+</FlowCallout>

@@ -17,8 +17,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>apigee</groupId>
-	<artifactId>mock</artifactId>
+	<artifactId>db-apx-accounts-services</artifactId>
 	<version>1.0</version>
-	<name>Mock-v1</name>
+	<name>db-apx-accounts-services</name>
 	<packaging>pom</packaging>
 </project>
